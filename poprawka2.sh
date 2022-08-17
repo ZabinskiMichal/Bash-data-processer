@@ -23,6 +23,7 @@ echo $()
 stopTime=`date +%s`
 #miktosekunda ma dokalosc 6 miejsc po przecinku
 #-n po echo sprawia ze nie ma znaku konca lini, i nastepne echo bedzie w tej samej linijce
+#najpierw wyciagamy sam pid procesu o nazwie poprawka2.sh, pozniej wyciagamy wszystkie pidy i ppidy i grepujemy to z pidem ktorego szukamy
 echo -n $(ps -a -o pid,ppid | grep $(ps -a | grep poprawka2.sh | cut -d " " -f 1 | head -n 1) | head -n 1) >> out.log
 echo -n " " >> out.log
 #bc to basic kalkulator, pozwala na wykonywanie obliczen z przecinkiem
