@@ -21,12 +21,17 @@ fi
 #2 START
 
 #trzeba przeiterowac po wszystkich argimentach zaczynajac od 2, zamiiast < "$2" po done trzeba przekazac te wszyskie argumnty
+for i in "${@:2}"
+do
+
 while read line
 do
 echo $line | cut -d "," -f 1
 mkdir "./$(echo $line | cut -d "," -f 1)"
 
-done < "$2"
+done < "$i"
+
+done
 
 #2 STOP
 
@@ -40,7 +45,7 @@ touch "ROK.MIESIAC.csv"
 while read doError
 do
 
-smdb=$(cut -d ',' -f 7 "$doError")
+smdb=$(echo $doErorr | cut -d "," -f 7)
 
 echo $smdb
 #if [ $((echo $doError | cut -d "," -f 7)) -eq 8 ]
