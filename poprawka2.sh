@@ -1,5 +1,6 @@
 #!/bin/bash
 
+
 #0 START
 
 #tutaj trzeba zamiast %s dac %N ale niestety u mnie na kompie to nie działa
@@ -13,11 +14,44 @@ elif [ $# == 1 ]
 then
 echo "podano tylko jeden argument, sprobuj: $0 <KAT_BAZOWY> <nazwa_pliku_danych1> <nazwa_pliku_danych2> <nazwa_pliku_danychN>" 1>&2
 exit 2
-else
 
 fi
 
-echo $()
+
+#2 START
+
+#trzeba przeiterowac po wszystkich argimentach zaczynajac od 2, zamiiast < "$2" po done trzeba przekazac te wszyskie argumnty
+while read line
+do
+echo $line | cut -d "," -f 1
+mkdir "./$(echo $line | cut -d "," -f 1)"
+
+done < "$2"
+
+#2 STOP
+
+#3 START
+
+#trzeba przemelsec jak ogarnac rok i miesiac
+
+#utworzenie roboczego pliku csv
+touch "ROK.MIESIAC.csv"
+
+while read doError
+do
+
+smdb=$(cut -d ',' -f 7 "$doError")
+
+echo $smdb
+#if [ $((echo $doError | cut -d "," -f 7)) -eq 8 ]
+#then
+#echo $doError
+ 
+#fi
+
+done < "$2"
+
+
 
 
 stopTime=`date +%s`
