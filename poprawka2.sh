@@ -3,8 +3,8 @@
 
 #0 START
 
-#tutaj trzeba zamiast %s dac %N ale niestety u mnie na kompie to nie działa
-startTime=`date +%s`
+#6N oznacza ze chcemy dokaldnosc mikrosekundowa
+#startTime=$(date +'%S.%6N')
 
 if [ $# == 0 ]
 then
@@ -16,6 +16,34 @@ echo "podano tylko jeden argument, sprobuj: $0 <KAT_BAZOWY> <nazwa_pliku_danych1
 exit 2
 
 fi
+
+#1 START
+
+#sprawdzenie czy istnieje katalog o nazwie podanje jako pierwszy argument
+# jezeli nie, program utworyz taki katalog
+if [ ! -d $1 ]
+then
+mkdir "./$1"
+fi
+
+#iterujemy po wszystkich argumetach
+for plik in "$@"
+do
+echo $plik
+
+#sprawdzamy czy aktyalny argument jest plikiem
+if [[ -f $plik ]]
+then
+
+
+fi
+
+
+
+done
+
+
+#1 STOP
 
 
 #2 START
@@ -59,16 +87,34 @@ done < "$2"
 
 
 
-stopTime=`date +%s`
+#stopTime=$(date +'%S.%6N')
+#czas=$(echo "scale=0; ($stopTime-$startTime)*1000000/1" | bc)
+
 #miktosekunda ma dokalosc 6 miejsc po przecinku
 #-n po echo sprawia ze nie ma znaku konca lini, i nastepne echo bedzie w tej samej linijce
 #najpierw wyciagamy sam pid procesu o nazwie poprawka2.sh, pozniej wyciagamy wszystkie pidy i ppidy i grepujemy to z pidem ktorego szukamy
-echo -n $(ps -a -o pid,ppid | grep $(ps -a | grep poprawka2.sh | cut -d " " -f 1 | head -n 1) | head -n 1) >> out.log
-echo -n " " >> out.log
-#bc to basic kalkulator, pozwala na wykonywanie obliczen z przecinkiem
-echo "scale=2;$stopTime-$startTime" | bc >> out.log
 
-#trzeba jeszcze dodac czwart elemtn czyli wiersz poeleenia uruchumienia ale nwm o co z tym chodzi
+#do pliku trzeba zapisac: PID,PPID,CZAS,WIERSZ_POLECENIA
+pid=$(ps -a -o pid | grep $(ps -a | grep poprawka2.sh | cut -d " " -f 1 | head -n 1) | head -n 1)
+
+#ta zmienna przechowuje pid i ppid
+pidIppid=$(ps -a -o pid,ppid | grep $(ps -a | grep poprawka2.sh | cut -d " " -f 1 | head -n 1) | head -n 1)
+
+# z powyzszej zmienne wyciagam druga kolumne ktora jest ppid
+ppid=$(echo $pidIppid | cut -d " " -f 2)
+
+
+echo -n "$pid,"  >> out.log
+echo -n "$ppid," >> out.log
+
+#trzeba jeszcze dodac czas ktory u mnie na kompie niestety nie dziala
+#echo -n "$czas," >> out.log
+# $@ to komenda wpisana do wiersza polecen podczas odpalana skryptu
+echo $@ >> out.log
+
+#0 STOP
+
+
 
 
 
