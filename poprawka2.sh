@@ -35,6 +35,22 @@ echo $plik
 if [[ -f $plik ]]
 then
 
+#przypisanie do zmiennej line ilosc linilej w sprawdzanym pliku
+line=$(cat $plik | wc -l)
+
+for ((j=1; $j<=$line; j++))
+do
+rok=$(cat "$plik" | head -n $j | tail -n 1 | cut -d "," -f 3 | tr -d '"')
+miesiac=$(cat "$plik" | head -n $j | tail -n 1 | cut -d "," -f 4 | tr -d '"')
+
+if [ ! -d "$1/$rok/$miesiac" ]
+then
+mkdir -m 750 -p "$1/$rok/$miesiac"
+fi
+
+done
+
+
 
 fi
 
