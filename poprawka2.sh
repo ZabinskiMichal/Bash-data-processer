@@ -19,8 +19,10 @@ fi
 
 #1 START
 
+
 #sprawdzenie czy istnieje katalog o nazwie podanje jako pierwszy argument
 # jezeli nie, program utworyz taki katalog
+
 if [ ! -d $1 ]
 then
 mkdir "./$1"
@@ -29,78 +31,73 @@ fi
 #iterujemy po wszystkich argumetach
 for plik in "$@"
 do
-echo $plik
 
 #sprawdzamy czy aktyalny argument jest plikiem
 if [[ -f $plik ]]
 then
 
-#przypisanie do zmiennej line ilosc linilej w sprawdzanym pliku
-line=$(cat $plik | wc -l)
-
-for ((j=1; $j<=$line; j++))
+while read line
 do
-rok=$(cat "$plik" | head -n $j | tail -n 1 | cut -d "," -f 3 | tr -d '"')
-miesiac=$(cat "$plik" | head -n $j | tail -n 1 | cut -d "," -f 4 | tr -d '"')
+
+
+#polecenie tr z przelacznikie -d pozwala pozbyc sie znaku cudzyslowia
+rok=$(echo $line | cut -d "," -f 3 | tr -d '"')
+miesiac=$(echo $line | cut -d "," -f 4 | tr -d '"')
 
 if [ ! -d "$1/$rok/$miesiac" ]
 then
-mkdir -m 750 -p "$1/$rok/$miesiac"
-fi
 
-done
-
-
+mkdir -p "$1/$rok/$miesiac"
 
 fi
-
-
-
-done
-
-
-#1 STOP
-
 
 #2 START
 
-#trzeba przeiterowac po wszystkich argimentach zaczynajac od 2, zamiiast < "$2" po done trzeba przekazac te wszyskie argumnty
-for i in "${@:2}"
-do
+dzien=$(echo $line | cut -d "," -f 5 | tr -d '"')
+smdb=$(echo $line | cut -d "," -f 7 | tr -d '"')
+          
+#sprawdzenie czy istnieje plik csv odpowiadajacy danemu dniu
+if [ ! -f "$1/$rok/$miesiac/$dzien.csv" ]
+then     
+#jezeli nie istnieje to tworzymy plik dla danego dnia
+touch "$1/$rok/$miesiac/$dzien.csv"
+fi           
+      
+if [[ $smdb -ne 8 ]]
+then
+echo "$line">>"$1/$rok/$miesiac/$dzien.csv"
+fi 
 
-while read line
-do
-echo $line | cut -d "," -f 1
-mkdir "./$(echo $line | cut -d "," -f 1)"
+#2 STOP
+ 
+#3 START
+if [[ $smdb -eq 8 ]]
+then
+    
+if [[ ! -f "$1/$rok.$miesiac.errors" ]]
+then
+touch "$1/$rok.$miesiac.errors"
+fi
 
-done < "$i"
+echo $line>>"$1/$rok.$miesiac.errors"
+
+fi
+
+#3 STOP
+
+
+done < "$plik"
+
+
+#-m  uprawniena do pliku
+#mkdir -m 750 -p "$1/$rok/$miesiac"
+#fi
+
+fi
 
 done
 
-#2 STOP
-
-#3 START
-
-#trzeba przemelsec jak ogarnac rok i miesiac
-
-#utworzenie roboczego pliku csv
-touch "ROK.MIESIAC.csv"
-
-while read doError
-do
-
-smdb=$(echo $doErorr | cut -d "," -f 7)
-
-echo $smdb
-#if [ $((echo $doError | cut -d "," -f 7)) -eq 8 ]
-#then
-#echo $doError
- 
-#fi
-
-done < "$2"
-
-
+#1 STOP
 
 
 #stopTime=$(date +'%S.%6N')
