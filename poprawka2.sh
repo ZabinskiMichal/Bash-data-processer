@@ -14,8 +14,23 @@ elif [ $# == 1 ]
 then
 echo "podano tylko jeden argument, sprobuj: $0 <KAT_BAZOWY> <nazwa_pliku_danych1> <nazwa_pliku_danych2> <nazwa_pliku_danychN>" 1>&2
 exit 2
-
 fi
+
+
+#petla czaynajaca iterowac od drugiego argumentu
+for arg in "${@:2}"
+do
+
+#sprawdzenie czy pliku podane jako argumenty (zaczynajac od 2 argumentu) istnieja
+if [[ ! -f $arg ]]
+then
+echo "error, blad dotyczy pliku: $arg"
+exit 3
+fi
+
+done
+
+
 
 #1 START
 
@@ -47,7 +62,7 @@ miesiac=$(echo $line | cut -d "," -f 4 | tr -d '"')
 if [ ! -d "$1/$rok/$miesiac" ]
 then
 
-mkdir -p "$1/$rok/$miesiac"
+mkdir -m 750 -p "$1/$rok/$miesiac"
 
 fi
 
@@ -97,7 +112,7 @@ fi
 
 done
 
-#1 STOP
+
 
 
 #stopTime=$(date +'%S.%6N')
