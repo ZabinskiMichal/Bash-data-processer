@@ -43,6 +43,13 @@ then
 mkdir "./$1"
 fi
 
+#ponowne sprawdzenie czy katalogBazowy istnieje, jesli nie: program konczy prace z kodem bled nr.4
+if [ ! -d $1 ]
+then
+exit 4
+fi
+
+
 #iterujemy po wszystkich argumetach
 for plik in "$@"
 do
