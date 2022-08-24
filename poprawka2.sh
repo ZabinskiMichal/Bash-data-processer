@@ -77,16 +77,20 @@ fi
 
 dzien=$(echo $line | cut -d "," -f 5 | tr -d '"')
 smdb=$(echo $line | cut -d "," -f 7 | tr -d '"')
+
+if [[ $smdb -ne 8 ]]
+then
+
           
 #sprawdzenie czy istnieje plik csv odpowiadajacy danemu dniu
 if [ ! -f "$1/$rok/$miesiac/$dzien.csv" ]
 then     
 #jezeli nie istnieje to tworzymy plik dla danego dnia
 touch "$1/$rok/$miesiac/$dzien.csv"
-fi           
-      
-if [[ $smdb -ne 8 ]]
-then
+fi 
+
+
+
 echo "$line">>"$1/$rok/$miesiac/$dzien.csv"
 fi 
 
@@ -130,17 +134,18 @@ done
 #najpierw wyciagamy sam pid procesu o nazwie poprawka2.sh, pozniej wyciagamy wszystkie pidy i ppidy i grepujemy to z pidem ktorego szukamy
 
 #do pliku trzeba zapisac: PID,PPID,CZAS,WIERSZ_POLECENIA
-pid=$(ps -a -o pid | grep $(ps -a | grep poprawka2.sh | cut -d " " -f 1 | head -n 1) | head -n 1)
+#pid=$(ps -a -o pid | grep $(ps -a | grep poprawka2.sh | cut -d " " -f 1 | head -n 1) | head -n 1)
 
 #ta zmienna przechowuje pid i ppid
-pidIppid=$(ps -a -o pid,ppid | grep $(ps -a | grep poprawka2.sh | cut -d " " -f 1 | head -n 1) | head -n 1)
+#pidIppid=$(ps -a -o pid,ppid | grep $(ps -a | grep poprawka2.sh | cut -d " " -f 1 | head -n 1) | head -n 1)
 
 # z powyzszej zmienne wyciagam druga kolumne ktora jest ppid
-ppid=$(echo $pidIppid | cut -d " " -f 2)
+#ppid=$(echo $pidIppid | cut -d " " -f 2)
 
 
-echo -n "$pid,"  >> out.log
-echo -n "$ppid," >> out.log
+echo -n "$PID"  >> out.log
+
+echo -n "$PPID," >> out.log
 
 #trzeba jeszcze dodac czas ktory u mnie na kompie niestety nie dziala
 #echo -n "$czas," >> out.log
@@ -148,7 +153,6 @@ echo -n "$ppid," >> out.log
 echo $@ >> out.log
 
 #0 STOP
-
 
 
 
