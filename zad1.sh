@@ -51,7 +51,12 @@ fi
 if [[ $smdb -eq 8 ]]
 then
 
-echo $line>>"$1/$rok/$miesiac.errors"
+if [[ ! -f "$1/$rok.$miesiac.errors" ]]
+then
+touch "$1/$rok.$miesiac.errors"
+fi
+
+echo $line>>"$1/$rok.$miesiac.errors"
 
 
 fi
