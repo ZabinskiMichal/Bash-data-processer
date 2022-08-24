@@ -4,7 +4,7 @@
 #0 START
 
 #6N oznacza ze chcemy dokaldnosc mikrosekundowa
-#startTime=$(date +'%S.%6N')
+startTime=$(date +'%S.%6N')
 
 if [ $# == 0 ]
 then
@@ -126,8 +126,8 @@ done
 
 
 
-#stopTime=$(date +'%S.%6N')
-#czas=$(echo "scale=0; ($stopTime-$startTime)*1000000/1" | bc)
+stopTime=$(date +'%S.%6N')
+czas=$(echo "scale=0; ($stopTime-$startTime)*1000000/1" | bc)
 
 #miktosekunda ma dokalosc 6 miejsc po przecinku
 #-n po echo sprawia ze nie ma znaku konca lini, i nastepne echo bedzie w tej samej linijce
@@ -143,12 +143,12 @@ done
 #ppid=$(echo $pidIppid | cut -d " " -f 2)
 
 
-echo -n "$PID"  >> out.log
+echo -n "$BASHPID"  >> out.log
 
 echo -n "$PPID," >> out.log
 
 #trzeba jeszcze dodac czas ktory u mnie na kompie niestety nie dziala
-#echo -n "$czas," >> out.log
+echo -n "$czas," >> out.log
 # $@ to komenda wpisana do wiersza polecen podczas odpalana skryptu
 echo $@ >> out.log
 
