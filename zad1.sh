@@ -43,9 +43,15 @@ then
 touch "$1/$rok/$miesiac/$dzien.csv"
 fi
 
-if [ $smdb -ne 8 ]
+if [[ $smdb -ne 8 ]]
 then
-echo "tu nie ma 8, oraz: $wiersz"
+echo "$line">>"$1/$rok/$miesiac/$dzien.csv"
+fi
+
+if [[ $smdb -eq 8 ]]
+then
+
+echo $line>>"$1/$rok/$miesiac.errors"
 
 
 fi
