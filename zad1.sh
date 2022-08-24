@@ -31,6 +31,26 @@ mkdir -p "$1/$rok/$miesiac"
 
 fi
 
+#2 START
+
+dzien=$(echo $line | cut -d "," -f 5 | tr -d '"')
+smdb=$(echo $line | cut -d "," -f 7 | tr -d '"')
+
+#sprawdzenie czy istnieje plik csv odpowiadajacy danemu dniu
+if [ ! -f "$1/$rok/$miesiac/$dzien.csv" ]
+then
+#jezeli nie istnieje to tworzymy plik dla danego dnia
+touch "$1/$rok/$miesiac/$dzien.csv"
+fi
+
+if [ $smdb -ne 8 ]
+then
+echo "tu nie ma 8, oraz: $wiersz"
+
+
+fi
+
+
 
 
 done < "$plik"
